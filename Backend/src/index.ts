@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { UserInterface } from "./types";
@@ -38,6 +38,17 @@ app.use("/api/auth", authRoutes);
 app.use("/api/board", boardRoutes);
 app.use("/api/task", todoRoutes);
 
+// test model
+import {
+  init,
+  createUser,
+  getUserById,
+  getUserByUsername,
+} from "./models/user.model";
+
+init();
+
+// aca termina el test model
 app.listen(PORT, () => {
   connectToMongo();
   console.log(`Server running on port http://localhost:${PORT}/`);
