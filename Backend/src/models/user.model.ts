@@ -7,7 +7,7 @@ export interface User {
   createdAt?: Date;
 }
 
-export async function init() {
+export async function initUserTable() {
   const createTable = `
     CREATE TABLE IF NOT EXISTS users(
       id SERIAL PRIMARY KEY,
