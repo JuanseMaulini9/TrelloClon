@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { UserInterface } from "./types";
+import { User } from "./models/user.model";
 import authRoutes from "./routes/auth.routes";
 import boardRoutes from "./routes/board.routes";
 import todoRoutes from "./routes/task.routes";
@@ -11,7 +11,7 @@ import cookieParser from "cookie-parser";
 declare global {
   namespace Express {
     interface Request {
-      user: UserInterface;
+      user: User;
     }
   }
 }

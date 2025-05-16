@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import User from "../schemas/user.schema";
 import { TokenPayload } from "../types";
 import { Request, Response, NextFunction } from "express";
+import { getUserById } from "../models/user.model";
 
 const protectRoute = async (
   req: Request,
@@ -24,7 +24,7 @@ const protectRoute = async (
       return res.status(401).send("Token verification failed");
     }
 
-    const user = await User.findById(decoded.userId).select("-password");
+    const user = await getUserById(parseInt(decoded.userId));
     if (!user) {
       return res.status(404).send("User not found");
     }

@@ -38,18 +38,18 @@ export async function getBoardsByUserId(userId: number): Promise<Board[]> {
   return res.rows;
 }
 
-export async function deleteBoard(boardId: number): Promise<Board> {
-  const query = `DELETE FROM boards * WHERE id = $1`;
+export async function deleteBoard(boardId: number): Promise<number> {
+  const query = `DELETE FROM boards WHERE id = $1`;
   const values = [boardId];
   const res = await pool.query(query, values);
-  return res.rows[0];
+  return res.rowCount ?? 0;
 }
 
 export async function updateBoard(
   boardId: number,
   newName: string
 ): Promise<Board> {
-  const query = `UPDATE boards SET boardName = $2 WHERE id = $1`;
+  const query = `UPDATE boards SET boardName = $2 WHERE id = $1 RETURNING *`;
   const values = [boardId, newName];
   const res = await pool.query(query, values);
   return res.rows[0];

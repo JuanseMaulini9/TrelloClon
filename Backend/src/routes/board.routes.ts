@@ -1,20 +1,16 @@
 import express from "express";
 import {
-  getBoards,
-  createBoard,
-  deleteBoard,
-  editBoard,
-  getBoardById,
-  getBoardsName,
+  getBoardsController,
+  createBoardController,
+  updateBoardController,
+  deleteBoardController,
 } from "../controllers/board.controller";
 import protectRoute from "../middlewares/protectRoute";
 const router = express.Router();
 
-router.get("/", protectRoute, getBoards);
-router.get("/boardsName", protectRoute, getBoardsName);
-router.get("/find/:boardId", protectRoute, getBoardById);
-router.post("/", protectRoute, createBoard);
-router.put("/:boardId", protectRoute, editBoard);
-router.delete("/:boardId", protectRoute, deleteBoard);
+router.get("/", protectRoute, getBoardsController);
+router.post("/", protectRoute, createBoardController);
+router.put("/:boardId", protectRoute, updateBoardController);
+router.delete("/:boardId", protectRoute, deleteBoardController);
 
 export default router;
