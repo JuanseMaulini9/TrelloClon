@@ -5,7 +5,6 @@ import { User } from "./models/user.model";
 import authRoutes from "./routes/auth.routes";
 import boardRoutes from "./routes/board.routes";
 import todoRoutes from "./routes/task.routes";
-import connectToMongo from "./db/connectMongo";
 import cookieParser from "cookie-parser";
 
 declare global {
@@ -39,6 +38,5 @@ app.use("/api/board", boardRoutes);
 app.use("/api/task", todoRoutes);
 
 app.listen(PORT, () => {
-  connectToMongo();
   console.log(`Server running on port http://localhost:${PORT}/`);
 });

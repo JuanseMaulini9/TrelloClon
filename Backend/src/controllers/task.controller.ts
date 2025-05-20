@@ -1,129 +1,152 @@
 import { Request, Response } from "express";
-import Task from "../schemas/tasks.schema";
-import Board from "../schemas/board.schema";
-import Tasks from "../schemas/tasks.schema";
-import mongoose from "mongoose";
 
-export const getTask = async (req: Request, res: Response) => {
-  try {
-    const { taskId } = req.body;
-    const task = await Task.findById(taskId);
-    res.status(200).json({ message: "Encontrado", task });
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ message: error.message });
-    }
+import {
+  createTask,
+  deleteTask,
+  getAllTasksByBoardId,
+  updatetask,
+} from "../models/task.model";
+
+export async function getTaskController(req: Request, res: Response) {
+  const userLogged = req.user;
+
+  if (!userLogged) {
+    return res.status(401).json({ message: "No hay usuario loggeado" });
   }
-};
-export const createTask = async (req: Request, res: Response) => {
+
+  const { boardId } = req.body;
+
+  if (!boardId) {
+    return res.status(400).json({ message: "BoardId invalido" });
+  }
+
   try {
-    const { stateValue, boardId } = req.body;
-    const newTask = new Task({
-      title: "New task",
-      stateValue,
+    const tasks = await getAllTasksByBoardId(boardId);
+    return res.status(200).json({ tasks: tasks });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+
+export async function createTaskController(req: Request, res: Response) {
+  const userLogged = req.user;
+
+  if (!userLogged) {
+    return res.status(401).json({ message: "No hay usuario loggeado" });
+  }
+
+  const { boardId, title, description, state, type, priority, limitTime } =
+    req.body;
+
+  if (!boardId || typeof boardId !== "number") {
+    return res
+      .status(400)
+      .json({ message: "boardId es requerido y debe ser un número" });
+  }
+
+  if (!title || typeof title !== "string") {
+    return res
+      .status(400)
+      .json({ message: "title es requerido y debe ser una cadena" });
+  }
+
+  if (!state || typeof state !== "string") {
+    return res
+      .status(400)
+      .json({ message: "state es requerido y debe ser una cadena" });
+  }
+
+  if (limitTime && isNaN(new Date(limitTime).getTime())) {
+    return res
+      .status(400)
+      .json({ message: "limitTime debe ser una fecha válida" });
+  }
+
+  try {
+    const newTask = await createTask(
+      userLogged.id,
       boardId,
-    });
-
-    await newTask.save();
-    await Board.findByIdAndUpdate(boardId, {
-      $push: { tasks: newTask._id },
-    });
-    return res.status(201).json({ message: `task created`, task: newTask });
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json(error);
-      console.log("error");
-    }
-  }
-};
-export const deleteTask = async (req: Request, res: Response) => {
-  try {
-    const { boardId, taskId } = req.body;
-    if (typeof taskId !== "string") {
-      return res.status(400).send("Error type");
-    }
-    await Task.findOneAndDelete({ taskId });
-    await Board.findByIdAndUpdate(boardId, {
-      $pull: { tasks: taskId },
-    });
-    res.status(201).send("Delete ok");
-  } catch (error) {
-    if (error instanceof Error) {
-      res.send(error);
-    }
-  }
-};
-
-export const editTask = async (req: Request, res: Response) => {
-  try {
-    const { title, description, expires, stateValue, taskList, _id } = req.body;
-    const updatedTask = await Task.findByIdAndUpdate(
-      _id,
-      {
-        title,
-        description,
-        expires,
-        stateValue,
-        taskList,
-      },
-      { new: true }
+      state,
+      title,
+      description,
+      type,
+      priority,
+      limitTime
     );
-    res.status(200).json({ update: updatedTask });
+    return res.status(201).json({ newTask: newTask });
   } catch (error) {
-    if (error instanceof Error) {
-      res.send(error);
-    }
+    console.log(error);
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
-};
+}
 
-export const addChecked = async (req: Request, res: Response) => {
+export async function deleteTaskController(req: Request, res: Response) {
+  const userLogged = req.user;
+
+  if (!userLogged) {
+    return res.status(401).json({ message: "No hay usuario loggeado" });
+  }
+
+  const { taskId } = req.body;
+
+  if (!taskId || typeof taskId !== "number") {
+    return res
+      .status(400)
+      .json({ message: "taskId es requerido y debe ser un número" });
+  }
+
+  await deleteTask(taskId);
+  return res.status(200).json({ message: `Se borro la tarea` });
+}
+
+export async function updateTaskController(req: Request, res: Response) {
+  const userLogged = req.user;
+
+  if (!userLogged) {
+    return res.status(401).json({ message: "No hay usuario loggeado" });
+  }
+
+  const { boardId, title, description, state, type, priority, limitTime } =
+    req.body;
+
+  if (!boardId || typeof boardId !== "number") {
+    return res
+      .status(400)
+      .json({ message: "boardId es requerido y debe ser un número" });
+  }
+
+  if (!title || typeof title !== "string") {
+    return res
+      .status(400)
+      .json({ message: "title es requerido y debe ser una cadena" });
+  }
+
+  if (!state || typeof state !== "string") {
+    return res
+      .status(400)
+      .json({ message: "state es requerido y debe ser una cadena" });
+  }
+
+  if (limitTime && isNaN(new Date(limitTime).getTime())) {
+    return res
+      .status(400)
+      .json({ message: "limitTime debe ser una fecha válida" });
+  }
+
   try {
-    const { _id, name } = req.body;
-
-    const task = await Tasks.findById(_id);
-    if (task) {
-      const newChecked = {
-        name: name,
-        value: false,
-        _id: new mongoose.Types.ObjectId(),
-      };
-
-      task.taskList.push(newChecked);
-      await task.save();
-      res.status(200).json({ addChecked: task });
-    }
+    const updatedTask = await updatetask(
+      boardId,
+      title,
+      description,
+      state,
+      type,
+      priority,
+      limitTime
+    );
+    return res.status(200).json({ updatedTask: updatedTask });
   } catch (error) {
-    if (error instanceof Error) {
-      res.send(error);
-    }
+    console.log(error);
+    return res.status(500).json({ error: "Error interno del servidor" });
   }
-};
-
-export const editedChecked = async (req: Request, res: Response) => {
-  try {
-    const { taskId, checkedId } = req.body;
-
-    const task = await Tasks.findById(taskId);
-    if (task) {
-      const checkedIndex = task.taskList.findIndex((taskItem) =>
-        taskItem._id.equals(checkedId)
-      );
-
-      if (checkedIndex !== -1) {
-        task.taskList[checkedIndex].value = !task.taskList[checkedIndex].value;
-        await task.save();
-        return res.status(200).json({ editedChecked: task });
-      } else {
-        return res.status(404).json({ message: "Checked item not found" });
-      }
-    } else {
-      return res.status(404).json({ message: "Task not found" });
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).send({ error: error.message });
-    } else {
-      res.status(500).send({ error: "Unknown error occurred" });
-    }
-  }
-};
+}
