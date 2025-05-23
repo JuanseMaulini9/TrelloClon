@@ -1,50 +1,54 @@
-# Project Management Frontend
+# React + TypeScript + Vite
 
-Este repositorio contiene el frontend para un gestor de proyectos basado en un formato de tablero estilo Trello. La aplicación permite a los usuarios interactuar con el backend para gestionar tareas y autenticar usuarios.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Características
+Currently, two official plugins are available:
 
-- **Interfaz de Usuario:** Muestra un tablero donde los usuarios pueden ver y gestionar tareas mediante cards organizadas en columnas: "Completadas", "En Progreso" y "No Empezadas".
-- **Autenticación:** Permite a los usuarios registrarse e iniciar sesión utilizando JWT (JSON Web Tokens) para acceder a las funcionalidades protegidas.
-- **Interactividad:** Incluye funcionalidades de arrastrar y soltar para mover tasks entre columnas, así como formularios para añadir y editar tareas.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Tecnologías Utilizadas
+## Expanding the ESLint configuration
 
-- **React:** Biblioteca para construir interfaces de usuario.
-- **Redux Toolkit:** Maneja el estado global de la aplicación.
-- **Tailwind CSS:** Utilizado para el diseño y la estilización de la interfaz.
-- **React Router:** Para la gestión de rutas y navegación en la aplicación.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-## Instalación
+```js
+export default tseslint.config({
+  extends: [
+    // Remove ...tseslint.configs.recommended and replace with this
+    ...tseslint.configs.recommendedTypeChecked,
+    // Alternatively, use this for stricter rules
+    ...tseslint.configs.strictTypeChecked,
+    // Optionally, add this for stylistic rules
+    ...tseslint.configs.stylisticTypeChecked,
+  ],
+  languageOptions: {
+    // other options...
+    parserOptions: {
+      project: ['./tsconfig.node.json', './tsconfig.app.json'],
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+})
+```
 
-1. **Clona el repositorio:**
-    ```bash
-    git clone https://github.com/tuusuario/project-management-frontend.git
-    ```
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-2. **Navega al directorio del proyecto:**
-    ```bash
-    cd project-management-frontend
-    ```
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-3. **Instala las dependencias:**
-    ```bash
-    npm install
-    ```
-
-4. **Configura las variables de entorno:**
-    Crea un archivo `.env` en la raíz del proyecto y agrega las siguientes variables:
-    ```env
-    REACT_APP_API_URL=http://localhost:5000/api
-    ```
-
-5. **Inicia la aplicación:**
-    ```bash
-    npm start
-    ```
-
-## Rutas
-
-- **/login:** Página de inicio de sesión.
-- **/register:** Página de registro de nuevo usuario.
-- **/board:** Vista principal del tablero de gestión de tareas.
+export default tseslint.config({
+  plugins: {
+    // Add the react-x and react-dom plugins
+    'react-x': reactX,
+    'react-dom': reactDom,
+  },
+  rules: {
+    // other rules...
+    // Enable its recommended typescript rules
+    ...reactX.configs['recommended-typescript'].rules,
+    ...reactDom.configs.recommended.rules,
+  },
+})
+```
