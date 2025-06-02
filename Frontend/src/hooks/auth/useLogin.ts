@@ -1,15 +1,16 @@
 import { useState } from "react";
 
+import { type UserInterface } from "../../types";
+
 export const useLogin = () => {
-  const [data, setData] = useState();
+  const [data, setData] = useState<UserInterface | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string>();
+  const [error, setError] = useState<string | null>(null);
 
   const backend_url = import.meta.env.VITE_BACKEND_URL;
 
   const login = async (username: string, password: string) => {
     setLoading(true);
-    setError(undefined);
 
     try {
       const response = await fetch(`${backend_url}/api/auth/login`, {

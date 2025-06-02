@@ -1,31 +1,28 @@
-import { useLogin } from "../hooks/auth/useLogin";
-
 import { useForm } from "react-hook-form";
 import { type SubmitHandler } from "react-hook-form";
 
-interface FormFields {
-  username: string;
-  password: string;
+import { type FormFields } from "../types";
+
+interface LoginFormProps {
+  onSubmit: (username: string, password: string) => void
+  loading: boolean
+  error: string | null
 }
 
-const LoginForm = () => {
+const LoginForm = ({onSubmit, error, loading}: LoginFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormFields>();
 
-  const { data, login, loading, error } = useLogin();
-
-  const onSubmit: SubmitHandler<FormFields> = ({ username, password }) =>
-    login(username, password);
-
-  console.log(data)
+  const handleFormSubmit: SubmitHandler<FormFields> = ({ username, password }) =>
+    onSubmit(username, password);
 
   return (
     <form
       className="flex flex-col gap-5 w-3/4 "
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleFormSubmit)}
     >
       <section className="flex flex-col gap-1">
         <label htmlFor="username">Username</label>
