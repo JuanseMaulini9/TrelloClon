@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
 import { signUp, logIn } from "../services/auth.services";
+import { getUserById } from "../models/user.model";
+
+import { verifyToken } from "../utils/verifyToken";
+
+import jwt from "jsonwebtoken";
 
 interface AuthRequestBody {
   username: string;
@@ -46,6 +51,30 @@ export async function logInController(
       .json({ message: `${username} logged` });
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+}
+
+export async function verifyController(req: Request, res: Response) {
+  try {
+    const token = req.cookies?.jwt;
+    const payload = verifyToken(token);
+    const userId = payload.userId;
+
+    const user = await getUserById(parseInt(userId));
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    if (
+      error instanceof jwt.JsonWebTokenError ||
+      error instanceof jwt.TokenExpiredError
+    ) {
+      return res.status(401).json({ message: "Invalid or expired token" });
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
 
