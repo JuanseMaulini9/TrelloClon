@@ -1,4 +1,4 @@
-import { useSignup } from "../hooks/auth/useSingup";
+import { useLogin } from "../hooks/auth/useLogin";
 
 import { useForm } from "react-hook-form";
 import { type SubmitHandler } from "react-hook-form";
@@ -8,23 +8,22 @@ interface FormFields {
   password: string;
 }
 
-const SignupForm = () => {
+const LoginForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormFields>();
 
-  const { data, signup, loading, error } = useSignup();
+  const { data, login, loading, error } = useLogin();
 
   const onSubmit: SubmitHandler<FormFields> = ({ username, password }) =>
-    signup(username, password);
+    login(username, password);
 
-  console.log(data);
+  console.log(data)
 
   return (
     <form
-      action=""
       className="flex flex-col gap-5 w-3/4 "
       onSubmit={handleSubmit(onSubmit)}
     >
@@ -64,11 +63,11 @@ const SignupForm = () => {
             : "bg-white text-black hover:bg-gray-100 hover:cursor-pointer"
         }`}
       >
-        {loading ? "cargando..." : "Create account"}
+        {loading ? "cargando..." : "Log in account"}
       </button>
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <span className="text-red-500">{error}</span>}
     </form>
   );
 };
 
-export default SignupForm;
+export default LoginForm;
