@@ -34,5 +34,5 @@ export async function logIn(username: string, password: string) {
     process.env.JWT_SECRET ? process.env.JWT_SECRET : "secreto",
     { expiresIn: "1h" }
   );
-  return token;
+  return { user, token };
 }

@@ -1,32 +1,29 @@
-import { useSignup } from "../hooks/auth/useSingup";
-
 import { useForm } from "react-hook-form";
 import { type SubmitHandler } from "react-hook-form";
 
-interface FormFields {
-  username: string;
-  password: string;
+import { type FormFields } from "../types";
+
+interface SignupFormInterface {
+  onSubmit: (username: string, password: string) => void
+  loading: boolean
+  error: string | null
 }
 
-const SignupForm = () => {
+const SignupForm = ({onSubmit, error, loading}:SignupFormInterface) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormFields>();
 
-  const { data, signup, loading, error } = useSignup();
-
-  const onSubmit: SubmitHandler<FormFields> = ({ username, password }) =>
-    signup(username, password);
-
-  console.log(data);
+  const handleFormSubmit: SubmitHandler<FormFields> = ({ username, password }) =>
+    onSubmit(username, password);
 
   return (
     <form
       action=""
       className="flex flex-col gap-5 w-3/4 "
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(handleFormSubmit)}
     >
       <section className="flex flex-col gap-1">
         <label htmlFor="username">Username</label>

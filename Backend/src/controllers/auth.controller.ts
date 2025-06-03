@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { signUp, logIn } from "../services/auth.services";
-import { getUserById } from "../models/user.model";
+import { getUserById, getUserByUsername } from "../models/user.model";
 
 import { verifyToken } from "../utils/verifyToken";
 
@@ -39,7 +39,7 @@ export async function logInController(
     return res.status(400).json({ message: "Parametros invalidos" });
   }
   try {
-    const token = await logIn(username, password);
+    const { user, token } = await logIn(username, password);
     res
       .cookie("jwt", token, {
         maxAge: 2 * 24 * 60 * 60 * 1000,
@@ -48,7 +48,7 @@ export async function logInController(
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
-      .json({ message: `${username} logged` });
+      .json({ username: user.username, id: user.id });
   } catch (error) {
     res.status(500).json({ error: error });
   }
