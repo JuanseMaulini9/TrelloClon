@@ -1,4 +1,4 @@
-import SignupForm from "../components/SignupForm";
+import SignupForm from "../components/auth/SignupForm";
 import AuthLayout from "../layout/AuthLayout";
 
 import { useSignup } from "../hooks/auth/useSingup";
