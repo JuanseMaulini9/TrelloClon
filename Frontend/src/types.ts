@@ -17,3 +17,20 @@ export interface FormFields {
   username: string;
   password: string;
 }
+
+export interface TaskInterface {
+  id: string;
+  title: string;
+  columnId: string;
+}
+
+export interface ColumnInterface {
+  name: string;
+  id: string;
+}
+
+export interface ColumnProps {
+  id: string;
+  name: string;
+  tasks: TaskInterface[];
+}
