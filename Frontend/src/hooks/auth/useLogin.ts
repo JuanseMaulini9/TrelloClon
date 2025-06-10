@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-import { type UserInterface } from "../../types";
+import { useAuthStore } from "../../store/authStore";
 
 export const useLogin = () => {
-  const [data, setData] = useState<UserInterface | null>(null);
+  const { setUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +26,7 @@ export const useLogin = () => {
       if (!response.ok) {
         throw new Error(result.message || "Login Error");
       }
-      setData(result);
+      setUser(result);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message || "Unknown error");
@@ -36,5 +36,5 @@ export const useLogin = () => {
     }
   };
 
-  return { data, loading, error, login };
+  return { loading, error, login };
 };

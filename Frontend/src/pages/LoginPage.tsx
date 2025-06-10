@@ -1,21 +1,20 @@
 import AuthLayout from "../layout/AuthLayout";
 import LoginForm from "../components/auth/LoginForm";
+import { useLogin } from "../hooks/auth/useLogin";
+import { useAuthStore } from "../store/authStore";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "../store/authStore";
-import { useLogin } from "../hooks/auth/useLogin";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-  const { data, error, loading, login } = useLogin();
-  const { setUser } = useAuthStore();
+  const { error, loading, login } = useLogin();
+  const {isAuthenticate} = useAuthStore()
+  const navigate = useNavigate()
 
   useEffect(() => {
-    if (data) {
-      setUser(data);
-      navigate("/dashboard");
+    if(isAuthenticate){
+      navigate("/dashboard", { replace: true })
     }
-  }, [data, setUser, navigate]);
+  }, [isAuthenticate, navigate])
 
   return (
     <AuthLayout

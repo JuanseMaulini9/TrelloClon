@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { type SubmitHandler } from "react-hook-form";
 
-import { type FormFields } from "../types";
+import { type FormFields } from "../../types";
 
 interface LoginFormProps {
   onSubmit: (username: string, password: string) => void

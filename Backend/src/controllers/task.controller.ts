@@ -36,8 +36,16 @@ export async function createTaskController(req: Request, res: Response) {
     return res.status(401).json({ message: "No hay usuario loggeado" });
   }
 
-  const { boardId, title, description, state, type, priority, limitTime } =
-    req.body;
+  const {
+    boardId,
+    title,
+    position,
+    description,
+    state,
+    type,
+    priority,
+    limitTime,
+  } = req.body;
 
   if (!boardId || typeof boardId !== "number") {
     return res
@@ -65,9 +73,9 @@ export async function createTaskController(req: Request, res: Response) {
 
   try {
     const newTask = await createTask(
-      userLogged.id,
       boardId,
       state,
+      position,
       title,
       description,
       type,

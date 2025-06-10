@@ -11,8 +11,8 @@ export function Card({ id, column, index }: Props) {
     id,
     index,
     group: column,
-    type: "item",
-    accept: ["item"],
+    type: "card",
+    accept: ["card"],
   });
 
   return (

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import type { UserInterface } from "../../types";
+import { useAuthStore } from "../../store/authStore";
 
 export const useSignup = () => {
-  const [data, setData] = useState<UserInterface | null>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const { setUser } = useAuthStore();
 
   const backend_url = import.meta.env.VITE_BACKEND_URL;
 
@@ -25,7 +26,7 @@ export const useSignup = () => {
       if (!response.ok) {
         throw new Error(result.message || "Signup Error");
       }
-      setData(result);
+      setUser(result);
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message || "Unknown error");
@@ -35,5 +36,5 @@ export const useSignup = () => {
     }
   };
 
-  return { data, loading, error, signup };
+  return { loading, error, signup };
 };

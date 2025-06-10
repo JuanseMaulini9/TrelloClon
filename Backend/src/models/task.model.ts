@@ -2,9 +2,9 @@ import { pool } from "../db/db";
 
 interface Task {
   id: number;
-  userId: number;
   boardId: number;
   state: string;
+  position: number;
   title: string;
   description?: string;
   type?: string;
@@ -17,16 +17,16 @@ export async function initTasksTable() {
   const createTable = `
       CREATE TABLE IF NOT EXISTS tasks(
         id SERIAL PRIMARY KEY,
-        userId INT,
         boardId INT,
         state VARCHAR(100) NOT NULL,
+        position INT,
         title VARCHAR(100) NOT NULL,
         description VARCHAR(100),
         type VARCHAR(100),
         priority VARCHAR(100),
         limitTime TIMESTAMP,
         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (userId) REFERENCES users(id)
+        FOREIGN KEY (boardId) REFERENCES boards(id)
       )
     `;
 
@@ -34,21 +34,21 @@ export async function initTasksTable() {
 }
 
 export async function createTask(
-  userId: number,
   boardId: number,
   state: string,
+  position: number,
   title: string,
   description: string,
   type: string,
   priority: string,
   limitTime: Date
 ): Promise<Task> {
-  const query = `INSERT INTO tasks(userId, boardId, state, title, description, type, priority, limitTime) 
+  const query = `INSERT INTO tasks(boardId, state, position, title, description, type, priority, limitTime) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`;
   const values = [
-    userId,
     boardId,
     state,
+    position,
     title,
     description,
     type,

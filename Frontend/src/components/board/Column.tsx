@@ -1,7 +1,5 @@
 import {useDroppable} from '@dnd-kit/react';
 import {CollisionPriority} from '@dnd-kit/abstract';
-
-// import { type ColumnProps } from "../../types";
 import type { ReactNode } from 'react';
 
 interface Props {
