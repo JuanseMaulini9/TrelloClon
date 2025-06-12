@@ -1,6 +1,11 @@
 import { create } from "zustand";
 
-export const useBoardStore = create((set) => ({
+import type { BoardStateInterface, BoardsActionInterface } from "../types";
+
+export const useBoardStore = create<
+  BoardStateInterface & BoardsActionInterface
+>((set) => ({
   boards: [],
+
   setBoards: (newBoards) => set({ boards: newBoards }),
 }));

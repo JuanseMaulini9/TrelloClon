@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-import type { AuthStateInterface, ActionsInterface } from "../types";
+import type { AuthStateInterface, AuthActionsInterface } from "../types";
 
-export const useAuthStore = create<AuthStateInterface & ActionsInterface>(
+export const useAuthStore = create<AuthStateInterface & AuthActionsInterface>(
   (set) => ({
     user: null,
     isAuthenticate: false,

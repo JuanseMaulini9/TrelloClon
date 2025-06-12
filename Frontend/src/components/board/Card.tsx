@@ -1,30 +1,29 @@
-import { useSortable } from "@dnd-kit/react/sortable";
+import { useDraggable } from "@dnd-kit/core";
 
 interface Props {
+  title: string;
   id: string;
-  column: string;
-  index: number;
+  columnId: string;
+  isPhantom?:boolean
 }
 
-export function Card({ id, column, index }: Props) {
-  const { ref } = useSortable({
-    id,
-    index,
-    group: column,
-    type: "card",
-    accept: ["card"],
-  });
+export function Card({ title, id, columnId, isPhantom }: Props) {
+  const { attributes, listeners, setNodeRef, isDragging } =
+    useDraggable({ id, data: { columnId } });
 
   return (
     <div
-      className={`w-full bg-neutral-700 rounded p-2 cursor-grab active:cursor-grabbing`}
-      ref={ref}
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={{
+        opacity: isDragging ? 0 : 1,
+      }}
+      className={`w-full bg-neutral-700 rounded p-2 cursor-grab active:cursor-grabbing ${isPhantom ? "rotate-5 text-white": ""}`}
     >
-      <h4>{id}</h4>
+      <h4>{title}</h4>
     </div>
   );
 }
 
-export default Card
-
-
+export default Card;

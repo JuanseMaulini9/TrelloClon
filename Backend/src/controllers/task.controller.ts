@@ -5,6 +5,7 @@ import {
   deleteTask,
   getAllTasksByBoardId,
   updatetask,
+  updateStateTask,
 } from "../models/task.model";
 
 export async function getTaskController(req: Request, res: Response) {
@@ -14,14 +15,14 @@ export async function getTaskController(req: Request, res: Response) {
     return res.status(401).json({ message: "No hay usuario loggeado" });
   }
 
-  const { boardId } = req.body;
+  const { boardId } = req.params;
 
   if (!boardId) {
     return res.status(400).json({ message: "BoardId invalido" });
   }
 
   try {
-    const tasks = await getAllTasksByBoardId(boardId);
+    const tasks = await getAllTasksByBoardId(parseInt(boardId));
     return res.status(200).json({ tasks: tasks });
   } catch (error) {
     console.log(error);
@@ -153,6 +154,26 @@ export async function updateTaskController(req: Request, res: Response) {
       limitTime
     );
     return res.status(200).json({ updatedTask: updatedTask });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+
+export async function changeStateTaskController(req: Request, res: Response) {
+  const userLogged = req.user;
+
+  if (!userLogged) {
+    return res.status(401).json({ message: "No hay usuario loggeado" });
+  }
+
+  const { taskId, state } = req.body;
+  try {
+    const updateTask = await updateStateTask(taskId, state);
+    if (!updateTask) {
+      return res.status(404).json({ error: "Task not found" });
+    }
+    return res.status(200).json({ changeState: updateTask });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Error interno del servidor" });

@@ -93,3 +93,13 @@ export async function updatetask(
   const res = await pool.query(query, values);
   return res.rows[0];
 }
+
+export async function updateStateTask(
+  id: number,
+  state: string
+): Promise<Task> {
+  const query = `UPDATE tasks SET state = $2 WHERE id = $1 RETURNING *`;
+  const values = [id, state];
+  const res = await pool.query(query, values);
+  return res.rows[0];
+}
