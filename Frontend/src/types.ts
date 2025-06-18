@@ -28,6 +28,7 @@ export interface BoardStateInterface {
 
 export interface BoardsActionInterface {
   setBoards: (boards: BoardInterface[]) => void;
+  setNewBoard: (newBoard: BoardInterface) => void;
 }
 
 export interface FormFields {

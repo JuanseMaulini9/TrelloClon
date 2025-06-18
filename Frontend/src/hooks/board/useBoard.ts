@@ -5,7 +5,7 @@ export const useBoard = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { setBoards } = useBoardStore();
+  const { setBoards, setNewBoard } = useBoardStore();
 
   const getBoards = useCallback(async () => {
     setLoading(true);
@@ -32,5 +32,23 @@ export const useBoard = () => {
     }
   }, [BACKEND_URL, setBoards]);
 
-  return { getBoards, loading, error };
+  const createBoard = async (boardName: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/board`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ boardName }),
+      });
+      if (!response.ok) throw new Error("Error al crear el board");
+      const res = await response.json();
+      setNewBoard(res.newBoard);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { getBoards, createBoard, loading, error };
 };
