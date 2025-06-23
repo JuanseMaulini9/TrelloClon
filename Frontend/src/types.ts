@@ -24,11 +24,15 @@ export interface AuthActionsInterface {
 // BoardsStore
 export interface BoardStateInterface {
   boards: BoardInterface[];
+  createBoardModal: boolean;
 }
 
 export interface BoardsActionInterface {
   setBoards: (boards: BoardInterface[]) => void;
   setNewBoard: (newBoard: BoardInterface) => void;
+
+  openModal: () => void;
+  closeModal: () => void;
 }
 
 export interface FormFields {

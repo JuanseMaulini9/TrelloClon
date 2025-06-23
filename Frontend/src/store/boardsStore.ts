@@ -6,7 +6,11 @@ export const useBoardStore = create<
   BoardStateInterface & BoardsActionInterface
 >((set, get) => ({
   boards: [],
+  createBoardModal: false,
 
   setBoards: (newBoards) => set({ boards: newBoards }),
   setNewBoard: (newBoard) => set({ boards: [...get().boards, newBoard] }),
+
+  openModal: () => set({ createBoardModal: true }),
+  closeModal: () => set({ createBoardModal: false }),
 }));

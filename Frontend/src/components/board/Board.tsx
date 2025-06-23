@@ -15,9 +15,10 @@ import {
   DragOverlay,
   type DragStartEvent,
 } from "@dnd-kit/core";
+import ModalBoard from "./ModalBoard";
 
 const Board = () => {
-  const { boards } = useBoardStore();
+  const { boards, createBoardModal } = useBoardStore();
   const { getBoards } = useBoard();
 
   const { tasks, getTasks, updateTask } = useTask();
@@ -93,6 +94,9 @@ const Board = () => {
           />
         ) : null}
       </DragOverlay>
+      {
+        createBoardModal && <ModalBoard/>
+      }
     </DndContext>
   );
 };
