@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 
 import { useDroppable } from "@dnd-kit/core";
 
+import { useBoardStore } from "../store/boardsStore";
+
 interface Props {
   children: ReactNode;
   id: string;
@@ -9,6 +11,8 @@ interface Props {
 
 const Column = ({ children, id }: Props) => {
   const { setNodeRef} = useDroppable({ id });
+
+  const {openCardModal} = useBoardStore()
 
   return (
     <section
@@ -19,7 +23,7 @@ const Column = ({ children, id }: Props) => {
       <div className="overflow-y-auto px-2 flex-1 flex flex-col gap-2">
         {children}
       </div>
-      <button className="w-full text-start p-2 rounded-lg hover:cursor-pointer hover:bg-neutral-700">
+      <button className="w-full text-start p-2 rounded-lg hover:cursor-pointer hover:bg-neutral-700" onClick={openCardModal}>
         <span className="font-bold text-xl">+</span> Add a card
       </button>
     </section>

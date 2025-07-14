@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useAuthStore } from "../../store/authStore";
+import { useAuthStore } from "../store/authStore";
 
 export const useLogin = () => {
   const { setUser } = useAuthStore();

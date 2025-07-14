@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuthStore } from "../../store/authStore";
+import { useAuthStore } from "../store/authStore";
 
 export const useSignup = () => {
   const [loading, setLoading] = useState(false);

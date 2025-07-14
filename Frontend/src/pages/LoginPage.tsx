@@ -1,7 +1,7 @@
 import AuthLayout from "../layout/AuthLayout";
-import LoginForm from "../components/auth/LoginForm";
-import { useLogin } from "../hooks/auth/useLogin";
-import { useAuthStore } from "../store/authStore";
+import LoginForm from "../features/auth/components/LoginForm";
+import { useLogin } from "../features/auth/hooks/useLogin";
+import { useAuthStore } from "../features/auth/store/authStore";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 

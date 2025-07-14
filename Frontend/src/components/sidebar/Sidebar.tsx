@@ -1,14 +1,14 @@
-import { useBoardStore } from "../../store/boardsStore";
+import { useBoardStore } from "../../features/board/store/boardsStore";
 
 import BoardItem from "./BoardItem";
 import {Plus} from "lucide-react"
 
 const Sidebar = () => {
-  const { boards, openModal } = useBoardStore();
+  const { boards, openCreateModal } = useBoardStore();
   
 
   const handleCreateBoardTest = () => {
-    openModal()
+    openCreateModal()
   };
 
   return (

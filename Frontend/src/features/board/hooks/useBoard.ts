@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { useBoardStore } from "../../store/boardsStore";
+import { useBoardStore } from "../store/boardsStore";
 
 export const useBoard = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;

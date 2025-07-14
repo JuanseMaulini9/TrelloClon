@@ -6,6 +6,7 @@ import {
   getAllTasksByBoardId,
   updatetask,
   updateStateTask,
+  createMiniTAsk,
 } from "../models/task.model";
 
 export async function getTaskController(req: Request, res: Response) {
@@ -60,17 +61,17 @@ export async function createTaskController(req: Request, res: Response) {
       .json({ message: "title es requerido y debe ser una cadena" });
   }
 
-  if (!state || typeof state !== "string") {
-    return res
-      .status(400)
-      .json({ message: "state es requerido y debe ser una cadena" });
-  }
+  // if (!state || typeof state !== "string") {
+  //   return res
+  //     .status(400)
+  //     .json({ message: "state es requerido y debe ser una cadena" });
+  // }
 
-  if (limitTime && isNaN(new Date(limitTime).getTime())) {
-    return res
-      .status(400)
-      .json({ message: "limitTime debe ser una fecha válida" });
-  }
+  // if (limitTime && isNaN(new Date(limitTime).getTime())) {
+  //   return res
+  //     .status(400)
+  //     .json({ message: "limitTime debe ser una fecha válida" });
+  // }
 
   try {
     const newTask = await createTask(
@@ -174,6 +175,26 @@ export async function changeStateTaskController(req: Request, res: Response) {
       return res.status(404).json({ error: "Task not found" });
     }
     return res.status(200).json({ changeState: updateTask });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ error: "Error interno del servidor" });
+  }
+}
+
+export async function createMiniTaskController(req: Request, res: Response) {
+  const userLogged = req.user;
+
+  if (!userLogged) {
+    return res.status(401).json({ message: "No hay usuario loggeado" });
+  }
+
+  const { title, description, boardId } = req.body;
+  try {
+    const miniTask = await createMiniTAsk(title, description, boardId);
+    if (!miniTask) {
+      return res.status(400).json({ error: "Task not found" });
+    }
+    return res.status(200).json(miniTask);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Error interno del servidor" });

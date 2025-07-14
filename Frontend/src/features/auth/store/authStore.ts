@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import type { AuthStateInterface, AuthActionsInterface } from "../types";
+import type { AuthStateInterface, AuthActionsInterface } from "../../../types";
 
 export const useAuthStore = create<AuthStateInterface & AuthActionsInterface>(
   (set) => ({

@@ -25,14 +25,21 @@ export interface AuthActionsInterface {
 export interface BoardStateInterface {
   boards: BoardInterface[];
   createBoardModal: boolean;
+  currentBoard: BoardInterface | null;
+  addCardModal: boolean;
 }
 
 export interface BoardsActionInterface {
   setBoards: (boards: BoardInterface[]) => void;
   setNewBoard: (newBoard: BoardInterface) => void;
 
-  openModal: () => void;
-  closeModal: () => void;
+  openCreateModal: () => void;
+  closeCreateModal: () => void;
+
+  openCardModal: () => void;
+  closeCardModal: () => void;
+
+  setCurrentBoard: (newCurrentBoard: BoardInterface) => void;
 }
 
 export interface FormFields {

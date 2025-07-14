@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 
 import Column from "./Column";
 import Card from "./Card";
+import Header from "./Header";
 
-import { useBoard } from "../../hooks/board/useBoard";
-import { useBoardStore } from "../../store/boardsStore";
+import { useBoard } from "../hooks/useBoard";
+import { useBoardStore } from "../store/boardsStore";
 
-import { useTask } from "../../hooks/task/useTask";
-import type { Task } from "../../types";
+import { useTask } from "../../task/hooks/useTask";
+import type { Task } from "../../../types";
 
 import {
   DndContext,
@@ -16,9 +17,10 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import ModalBoard from "./ModalBoard";
+import ModalCard from "./ModalCard";
 
 const Board = () => {
-  const { boards, createBoardModal } = useBoardStore();
+  const { boards, createBoardModal, addCardModal } = useBoardStore();
   const { getBoards } = useBoard();
 
   const { tasks, getTasks, updateTask } = useTask();
@@ -62,11 +64,16 @@ const Board = () => {
 
   return (
     <DndContext
+
       onDragStart={handleDragStart}
       onDragCancel={() => setActiveTask(null)}
       onDragEnd={handleDragEnd}
     >
-      <main className="flex flex-row flex-1 items-start bg-neutral-900 gap-4 justify-start px-10 py-5 overflow-x-auto">
+      <main className="flex flex-col flex-1 items-start bg-neutral-900 gap-5 justify-start overflow-x-auto">
+        <div className="w-full text-white text-center">
+          <Header></Header>
+        </div>
+        <div className="flex flex-row flex-1 items-start gap-4 px-4 py-5">
         {columns.map((column) => {
           const columnTasks = getTasksForColumn(column);
 
@@ -83,6 +90,8 @@ const Board = () => {
             </Column>
           );
         })}
+        </div>
+        
       </main>
       <DragOverlay>
         {activeTask ? (
@@ -97,7 +106,11 @@ const Board = () => {
       {
         createBoardModal && <ModalBoard/>
       }
+      {
+        addCardModal && <ModalCard></ModalCard>
+      }
     </DndContext>
+    
   );
 };
 

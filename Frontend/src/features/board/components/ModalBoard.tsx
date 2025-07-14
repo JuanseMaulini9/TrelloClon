@@ -1,13 +1,13 @@
-import { useBoardStore } from "../../store/boardsStore";
+import { useBoardStore } from "../store/boardsStore";
 
 import { X, Check } from "lucide-react";
 
 import { useState } from "react";
 
-import { useBoard } from "../../hooks/board/useBoard";
+import { useBoard } from "../hooks/useBoard";
 
 const ModalBoard = () => {
-  const { closeModal } = useBoardStore();
+  const { closeCreateModal } = useBoardStore();
 
   const [boardName, setBoardName] = useState("");
 
@@ -19,14 +19,14 @@ const ModalBoard = () => {
 
   const handleCreate = () => {
     createBoard(boardName);
-    closeModal()
+    closeCreateModal()
   };
 
   return (
     <div className="w-screen h-screen absolute bg-neutral-700/50 flex justify-center items-center">
       <section className="bg-neutral-800 relative flex flex-col gap-3 p-2 rounded">
         <button
-          onClick={closeModal}
+          onClick={closeCreateModal}
           className="absolute top-2 right-2  hover:cursor-pointer"
         >
           <X color="white" />

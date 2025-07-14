@@ -1,15 +1,15 @@
 import { useForm } from "react-hook-form";
 import { type SubmitHandler } from "react-hook-form";
 
-import { type FormFields } from "../../types";
+import { type FormFields } from "../../../types";
 
-interface LoginFormProps {
+interface SignupFormInterface {
   onSubmit: (username: string, password: string) => void
   loading: boolean
   error: string | null
 }
 
-const LoginForm = ({onSubmit, error, loading}: LoginFormProps) => {
+const SignupForm = ({onSubmit, error, loading}:SignupFormInterface) => {
   const {
     register,
     handleSubmit,
@@ -21,6 +21,7 @@ const LoginForm = ({onSubmit, error, loading}: LoginFormProps) => {
 
   return (
     <form
+      action=""
       className="flex flex-col gap-5 w-3/4 "
       onSubmit={handleSubmit(handleFormSubmit)}
     >
@@ -60,11 +61,11 @@ const LoginForm = ({onSubmit, error, loading}: LoginFormProps) => {
             : "bg-white text-black hover:bg-gray-100 hover:cursor-pointer"
         }`}
       >
-        {loading ? "cargando..." : "Log in account"}
+        {loading ? "cargando..." : "Create account"}
       </button>
-      {error && <span className="text-red-500">{error}</span>}
+      {error && <p className="text-red-500">{error}</p>}
     </form>
   );
 };
 
-export default LoginForm;
+export default SignupForm;

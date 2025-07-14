@@ -1,8 +1,8 @@
-import SignupForm from "../components/auth/SignupForm";
+import SignupForm from "../features/auth/components/SignupForm";
 import AuthLayout from "../layout/AuthLayout";
 
-import { useSignup } from "../hooks/auth/useSingup";
-import { useAuthStore } from "../store/authStore";
+import { useSignup } from "../features/auth/hooks/useSingup";
+import { useAuthStore } from "../features/auth/store/authStore";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 

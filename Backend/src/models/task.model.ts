@@ -18,7 +18,7 @@ export async function initTasksTable() {
       CREATE TABLE IF NOT EXISTS tasks(
         id SERIAL PRIMARY KEY,
         boardId INT,
-        state VARCHAR(100) NOT NULL,
+        state VARCHAR(100) NULL,
         position INT,
         title VARCHAR(100) NOT NULL,
         description VARCHAR(100),
@@ -102,4 +102,16 @@ export async function updateStateTask(
   const values = [id, state];
   const res = await pool.query(query, values);
   return res.rows[0];
+}
+
+export async function createMiniTAsk(
+  title: string,
+  description: string,
+  boardId: Number
+) {
+  const query = `INSERT INTO tasks(boardId, title, description) VALUES($1, $2, $3) RETURNING *`;
+  const values = [boardId, title, description];
+
+  const res = await pool.query(query, values);
+  return res.rows;
 }

@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import type { Task } from "../../types";
+import type { Task } from "../../../types";
 
 export const useTask = () => {
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -63,5 +63,34 @@ export const useTask = () => {
     }
   };
 
-  return { tasks, getTasks, updateTask, loading, error };
+  const createTask = async (
+    title: string,
+    description: string,
+    boardId: number
+  ) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/task/createMiniTask`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, description, boardId }),
+      });
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Error desconocido");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { tasks, getTasks, updateTask, createTask, loading, error };
 };
